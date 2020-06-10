@@ -1,6 +1,6 @@
 const localItemName = 'recordList';
 
-const model = {
+const recordListModel = {
   clone(data: any) {
     return JSON.parse(JSON.stringify(data));
   },
@@ -12,4 +12,4 @@ const model = {
   }
 };
 
-export {model};
+export {recordListModel};

@@ -1,7 +1,6 @@
 <template>
 
   <Layout class-prefix="layout">
-    {{recordList}}
     <Tags :data-source.sync="tags" @update:selected="onUpdateSelected"/>
     <Notes :value="record.notes" @update:value="onUpdateNotes"/>
     <Types :value.sync="record.type"/>
@@ -16,7 +15,10 @@
   import Notes from '@/components/Money/Notes.vue';
   import Types from '@/components/Money/Types.vue';
   import NumberPad from '@/components/Money/NumberPad.vue';
-  import {model} from '@/model.ts';
+  import {recordListModel} from '@/models/recordListModel';
+  import {tagListModel} from '@/models/tagListModel';
+
+  const tagList = tagListModel.fetch();
 
   @Component({
     components: {NumberPad, Types, Notes, Tags}
@@ -29,7 +31,7 @@
       type: '-',
       amount: 0
     };
-    recordList: RecordItem[] = model.fetch();
+    recordList: RecordItem[] = recordListModel.fetch();
 
 
     onUpdateSelected(selectedTags: string[]) {
@@ -41,13 +43,13 @@
     }
 
     saveRecord() {
-      const newRecord = model.clone(this.record);
+      const newRecord = recordListModel.clone(this.record);
       this.recordList.push(newRecord);
     }
 
     @Watch('recordList') //这里可以watch到
     onRecordListChange() {
-      model.save(this.recordList);
+      recordListModel.save(this.recordList);
     }
 
   }
@@ -57,6 +59,5 @@
   .layout-content {
     display: flex;
     flex-direction: column;
-    background: #f5f5f5;
   }
 </style>
