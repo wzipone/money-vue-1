@@ -1,6 +1,7 @@
 <template>
 
   <Layout class-prefix="layout">
+    {{recordList}}
     <Tags :data-source.sync="tags" @update:selected="onUpdateSelected"/>
     <Notes :value="record.notes" @update:value="onUpdateNotes"/>
     <Types :value.sync="record.type"/>
@@ -15,26 +16,21 @@
   import Notes from '@/components/Money/Notes.vue';
   import Types from '@/components/Money/Types.vue';
   import NumberPad from '@/components/Money/NumberPad.vue';
-
-  type Record = {
-    selectedTags: string[];
-    notes: string;
-    type: '-' | '+';
-    amount: number;
-  }
+  import {model} from '@/model.ts';
 
   @Component({
     components: {NumberPad, Types, Notes, Tags}
   })
   export default class Money extends Vue {
     tags = ['衣', '食', '住', '行'];
-    record: Record = {
+    record: RecordItem = {
       selectedTags: [],
       notes: '',
       type: '-',
       amount: 0
     };
-    recordList: Record[] = [];
+    recordList: RecordItem[] = model.fetch();
+
 
     onUpdateSelected(selectedTags: string[]) {
       this.record.selectedTags = selectedTags;
@@ -45,13 +41,13 @@
     }
 
     saveRecord() {
-      const newRecord = JSON.parse(JSON.stringify(this.record));
+      const newRecord = model.clone(this.record);
       this.recordList.push(newRecord);
     }
 
-    @Watch('recordList')
+    @Watch('recordList') //这里可以watch到
     onRecordListChange() {
-      window.localStorage.setItem('recordList', JSON.stringify(this.recordList));
+      model.save(this.recordList);
     }
 
   }

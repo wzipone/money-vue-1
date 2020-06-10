@@ -20,4 +20,4 @@ function generateOutput(input: string, output: string) {
   return '0';
 }
 
-export default generateOutput
+export {generateOutput};

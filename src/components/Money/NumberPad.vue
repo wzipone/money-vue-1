@@ -24,7 +24,7 @@
 <script lang="ts">
   import Vue from 'vue';
   import {Component, Prop} from 'vue-property-decorator';
-  import generateOutput from '@/lib/generateOutput.ts';
+  import {generateOutput} from '@/lib/generateOutput.ts';
 
   @Component
   export default class NumberPad extends Vue {
@@ -41,6 +41,7 @@
       e.stopPropagation();
       this.$emit('update:value', parseFloat(this.output)); //用来更新record
       this.$emit('submit');// 用来提交数据
+      this.output = '0'
     }
   }
 </script>
