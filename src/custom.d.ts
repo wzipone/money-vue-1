@@ -4,3 +4,7 @@ type RecordItem = {
   type: '-' | '+';
   amount: number;
 }
+type Tag = {
+  id: string;
+  name: string;
+}

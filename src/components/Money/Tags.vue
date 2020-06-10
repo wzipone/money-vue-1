@@ -1,10 +1,10 @@
 <template>
   <section class="tags">
     <ul class="current">
-      <li v-for="tag in dataSource" :key="tag"
-          :class="{selected:selectedTags.indexOf(tag) >= 0}"
-          @click="toggle(tag)">
-        {{tag}}
+      <li v-for="tag in dataSource" :key="tag.id"
+          :class="{selected:selectedTags.indexOf(tag.id) >= 0}"
+          @click="toggle(tag.id)">
+        {{tag.name}}
       </li>
     </ul>
     <div class="new">
@@ -16,31 +16,35 @@
 <script lang="ts">
   import Vue from 'vue';
   import {Component, Prop} from 'vue-property-decorator';
+  import {tagListModel} from '@/models/tagListModel';
 
   @Component
   export default class Tags extends Vue {
-    @Prop() readonly dataSource: string[] | undefined;
+    @Prop() readonly dataSource: Tag[] | undefined;
     selectedTags: string[] = [];
 
-    toggle(tag: string) {
-      const index = this.selectedTags.indexOf(tag);
+    toggle(tagId: string) {
+      const index = this.selectedTags.indexOf(tagId);
       if (index >= 0) {
         this.selectedTags.splice(index, 1);
       } else {
-        this.selectedTags.push(tag);
+        this.selectedTags.push(tagId);
       }
       this.$emit('update:selected', this.selectedTags);
     }
 
     create() {
-      const tagName = prompt('请输入新的标签名');
-      console.log(tagName);
+      const tagName = prompt('请输入新标签名');
+      if (tagName === null) return;
       if (tagName === '') {
-        alert('标签明不能为空');
-      } else if (tagName === null) {
+        alert('标签名不能为空');
         return;
-      } else if (this.dataSource) {
-        this.$emit('update:dataSource', [...this.dataSource, tagName]);
+      }
+      const message = tagListModel.create(tagName);
+      if (message === 'duplicated') {
+        alert('标签名重复');
+      } else if (message === 'success') {
+        alert('添加成功');
       }
     }
 
