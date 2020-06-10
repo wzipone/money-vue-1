@@ -1,7 +1,7 @@
 <template>
   <ul class="types">
-    <li :class="value === '-' && 'selected'" @click="selectType('-')">支出</li>
-    <li :class="value === '+' && 'selected'" @click="selectType('+')">收人</li>
+    <li :class="type === '-' && 'selected'" @click="selectType('-')">支出</li>
+    <li :class="type === '+' && 'selected'" @click="selectType('+')">收人</li>
   </ul>
 </template>
 
@@ -11,9 +11,9 @@
 
   @Component //装饰器
   export default class Types extends Vue {
-    @Prop(String) readonly value !: string;
+    @Prop(String) readonly type !: string;
     selectType(value: '-'|'+'){
-      this.$emit('update:value',value)
+      this.$emit('update:type',value)
     }
   }
 </script>

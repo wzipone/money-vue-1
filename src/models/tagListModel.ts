@@ -7,6 +7,7 @@ type TagListModel = {
   save: () => void;
   create: (name: string) => 'success' | 'duplicated';
   isNameDuplicate: (name: string) => boolean;
+  updateTag: (tagId: string, name: string) => void;
 }
 const tagListModel: TagListModel = {
   data: [],
@@ -27,6 +28,15 @@ const tagListModel: TagListModel = {
   isNameDuplicate(name) {
     const names = this.data.map(tag => tag.name);
     return names.indexOf(name) >= 0;
+  },
+  updateTag(tagId, name) {
+    this.data.map(tag => {
+      if (tag.id === tagId) {
+        tag.name = name;
+      }
+      return tag;
+    });
+    this.save()
   }
 };
 
