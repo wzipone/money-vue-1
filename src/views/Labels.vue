@@ -1,10 +1,10 @@
 <template>
   <Layout>
-    <ul class="tags">
-      <li v-for="tag in tags" :key="tag.id"><span>{{tag.name}}</span>
+    <div class="tags">
+      <router-link :to="`/labels/edit/${tag.id}`" v-for="tag in tags" :key="tag.id"><span>{{tag.name}}</span>
         <Icon name="right"/>
-      </li>
-    </ul>
+      </router-link>
+    </div>
     <div class="createTag-wrapper">
       <button class="createTag" @click="createTag">新增标签</button>
     </div>
@@ -13,7 +13,7 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component, Prop} from 'vue-property-decorator';
+  import {Component} from 'vue-property-decorator';
   import {tagListModel} from '@/models/tagListModel';
 
   tagListModel.fetch();
@@ -47,7 +47,7 @@
     font-size: 16px;
     padding-left: 16px;
 
-    > li {
+    > a {
       min-height: 44px;
       display: flex;
       justify-content: space-between;
