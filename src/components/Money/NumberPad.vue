@@ -13,7 +13,7 @@
       <button>7</button>
       <button>8</button>
       <button>9</button>
-      <button class="ok">OK</button>
+      <button class="ok" @click="onOk">OK</button>
       <button class="last">0</button>
       <button class="last">.</button>
       <button class="last">+</button>
@@ -23,16 +23,24 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component} from 'vue-property-decorator';
+  import {Component, Prop} from 'vue-property-decorator';
   import generateOutput from '@/lib/generateOutput.ts';
 
   @Component
   export default class NumberPad extends Vue {
-    output = '0';
+    @Prop(Number) readonly value!: number;
+    output = this.value.toString();
 
     onInput(e: MouseEvent) {
       const input = (e.target as HTMLButtonElement).textContent;
-      if(input) this.output = generateOutput(input, this.output);
+      if (input) this.output = generateOutput(input, this.output);
+
+    }
+
+    onOk(e: MouseEvent) {
+      e.stopPropagation();
+      this.$emit('update:value', parseFloat(this.output)); //用来更新record
+      this.$emit('submit');// 用来提交数据
     }
   }
 </script>

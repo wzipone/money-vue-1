@@ -17,6 +17,7 @@
 
     oninput(e: InputEvent) {
       this.value = (e.target as HTMLInputElement).value;
+      this.$emit("update:value",this.value)
     }
   }
 </script>

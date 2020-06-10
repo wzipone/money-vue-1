@@ -29,12 +29,16 @@
       } else {
         this.selectedTags.push(tag);
       }
+      this.$emit('update:selected', this.selectedTags);
     }
 
     create() {
       const tagName = prompt('请输入新的标签名');
+      console.log(tagName);
       if (tagName === '') {
         alert('标签明不能为空');
+      } else if (tagName === null) {
+        return;
       } else if (this.dataSource) {
         this.$emit('update:dataSource', [...this.dataSource, tagName]);
       }
