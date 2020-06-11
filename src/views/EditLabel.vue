@@ -16,7 +16,7 @@
   import Vue from 'vue';
   import {Component, Watch} from 'vue-property-decorator';
   import {tagListModel} from '@/models/tagListModel';
-  import Input from '@/components/Input.vue';
+  import Input from '@/components/InputItem.vue';
 
   @Component({
     components: {Input}
