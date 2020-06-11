@@ -3,7 +3,10 @@
   <Layout class-prefix="layout">
     {{record}}
     <Tags :data-source.sync="tags" @update:selected="onUpdateSelected"/>
-    <Notes :value="record.notes" @update:value="onUpdateNotes"/>
+    <!--    <Notes :value="record.notes" @update:value="onUpdateNotes"/>-->
+    <div class="notes">
+      <InputItem :value.sync="record.notes" placeholder="请输入备注" label="备注"/>
+    </div>
     <Types :type="record.type" @update:type="record.type = $event"/>
     <NumberPad :value.sync="record.amount" @submit="saveRecord"/>
   </Layout>
@@ -18,11 +21,12 @@
   import NumberPad from '@/components/Money/NumberPad.vue';
   import {recordListModel} from '@/models/recordListModel';
   import {tagListModel} from '@/models/tagListModel';
+  import InputItem from '@/components/InputItem.vue';
 
   tagListModel.fetch();
 
   @Component({
-    components: {NumberPad, Types, Notes, Tags}
+    components: {InputItem, NumberPad, Types, Notes, Tags}
   })
   export default class Money extends Vue {
     tags = tagListModel.data;
@@ -60,5 +64,8 @@
   .layout-content {
     display: flex;
     flex-direction: column;
+  }
+  .notes{
+    padding: 10px 0;
   }
 </style>

@@ -3,7 +3,6 @@
     <span class="name">备注</span>
     <input type="text" :value="value"
            @input="oninput">
-    {{value}}
   </label>
 </template>
 

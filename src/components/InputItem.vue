@@ -13,7 +13,7 @@
   import {Component, Prop} from 'vue-property-decorator';
 
   @Component
-  export default class Input extends Vue {
+  export default class InputItem extends Vue {
 
     @Prop({type: String, required: true})
     label!: string;
@@ -42,7 +42,7 @@
 
     > input {
       flex-grow: 1;
-      height: 64px;
+      height: 44px;
       border: none;
       background: transparent;
     }
