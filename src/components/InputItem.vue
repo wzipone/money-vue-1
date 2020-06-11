@@ -18,7 +18,7 @@
     @Prop({type: String, required: true})
     label!: string;
     @Prop({type: String, default: ''})
-    value!: string;
+    readonly value!: string;
     @Prop({type: String, default: ''}) //这里填了默认值好不好使用，还需要在ts中断言非空
     placeholder!: string;
 

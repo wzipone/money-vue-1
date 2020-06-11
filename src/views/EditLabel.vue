@@ -1,16 +1,16 @@
 <template>
   <Layout>
     <div class="navBar">
-      <Icon class="leftIcon" name="left"></Icon>
+      <Icon class="leftIcon" name="left" @click.native="goBack"></Icon>
       <span class="title">编辑标签</span>
       <span class="rightSpace"></span>
     </div>
     <div class="inputItem-wrapper">
-      <InputItem label="标签名" :value.sync="tag.name" placeholder="请输入标签名"/>
+      <InputItem label="标签名" :value="tag && tag.name" @update:value="onUpdateValue" placeholder="请输入标签名"/>
     </div>
-  <div class="button-wrapper">
-    <Button>删除标签</Button>
-  </div>
+    <div class="button-wrapper">
+      <Button @click.native="remove">删除标签</Button>
+    </div>
   </Layout>
 </template>
 
@@ -25,21 +25,47 @@
     components: {Button, InputItem}
   })
   export default class EditLabel extends Vue {
-    tag: Tag = {id: '', name: ''};
+    tag: Tag | undefined = undefined;
 
-    created() {
-      console.log('life');
-      tagListModel.fetch();
-      const {id} = this.$route.params;
-      this.tag = tagListModel.data.filter(tag => tag.id === id)[0];
-      if (!this.tag) {
-        this.$router.replace(`/404`);
+
+    onUpdateValue(newName: string) {
+      if (this.tag) {
+        const sign = tagListModel.update(this.tag.id, newName);
+        if (sign === 'success') {
+          alert('修改成功');
+        } else if (sign === 'duplicated') {
+          alert('标签名重复');
+        } else if (sign === 'not_found') {
+          alert('没有找到该标签');
+        }
+
       }
     }
 
-    @Watch('tag')
-    onTagChanged() {
-      this.tag && tagListModel.updateTag(this.tag.id, this.tag.name);
+    remove() {
+      console.log(1);
+      if (this.tag) {
+        if (tagListModel.remove(this.tag.id)) {
+          alert('删除成功');
+          this.$router.replace('/labels');
+        }
+      }
+    }
+
+    goBack() {
+      this.$router.push('/labels')
+    }
+
+    created() {
+      // tagListModel.fetch();
+      const {id} = this.$route.params;
+      const tag = tagListModel.find(id);
+      console.log(tag);
+      if (tag) {
+        this.tag = tag;
+      } else {
+        this.$router.replace(`/404`);
+      }
     }
 
   }
@@ -64,11 +90,13 @@
       height: 20px;
     }
   }
-  .inputItem-wrapper{
+
+  .inputItem-wrapper {
     margin-top: 16px;
     background-color: white;
   }
-  .button-wrapper{
+
+  .button-wrapper {
     display: flex;
     justify-content: center;
     padding-top: 16px;

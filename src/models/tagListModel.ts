@@ -7,7 +7,9 @@ type TagListModel = {
   save: () => void;
   create: (name: string) => 'success' | 'duplicated';
   isNameDuplicate: (name: string) => boolean;
-  updateTag: (tagId: string, name: string) => void;
+  update: (tagId: string, name: string) => 'success' | 'duplicated' | 'not_found';
+  find: (id: string) => Tag | undefined;
+  remove: (id: string) => Tag | undefined;
 }
 const tagListModel: TagListModel = {
   data: [],
@@ -29,14 +31,28 @@ const tagListModel: TagListModel = {
     const names = this.data.map(tag => tag.name);
     return names.indexOf(name) >= 0;
   },
-  updateTag(tagId, name) {
-    this.data.map(tag => {
-      if (tag.id === tagId) {
-        tag.name = name;
-      }
-      return tag;
-    });
-    this.save()
+  update(tagId, name) {
+    if (this.isNameDuplicate(name)) return 'duplicated';
+    const tag = this.find(tagId);
+    if (tag) {
+      tag.name = name;
+      this.save();
+      return 'success';
+    } else {
+      return 'not_found';
+    }
+  },
+  find(id) {
+    return this.data.filter(tag => tag.id === id)[0];
+  },
+  remove(id) {
+    const tag = this.find(id);
+    if (tag) {
+      const index = this.data.indexOf(tag);
+      this.data.splice(index, 1);
+      this.save()
+    }
+    return tag;
   }
 };
 
