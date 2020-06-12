@@ -15,17 +15,16 @@
 <script lang="ts">
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-  import {tagListModel} from '@/models/tagListModel';
   import Button from '@/components/Button.vue';
+  import store from '@/store/storeIndex';
 
-  tagListModel.fetch();
 
   @Component({
     components: {Button}
   })
   export default class Labels extends Vue {
 
-    tags = tagListModel.data;
+    tags = store.tagList;
 
     createTag() {
       const tagName = prompt('请输入新标签名');
@@ -35,10 +34,7 @@
         return;
       }
 
-      const message = tagListModel.create(tagName);
-      if (message === 'duplicated') {
-        alert('标签名重复');
-      }
+      store.createTag(tagName)
     }
   }
 </script>

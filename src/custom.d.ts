@@ -1,24 +1,7 @@
-type RecordItem = {
-  selectedTags: string[];
-  notes: string;
-  type: '-' | '+';
-  amount: number;
-}
-type Tag = {
-  id: string;
-  name: string;
-}
-type TagListModel = {
-  data: Tag[];
-  fetch: () => Tag[];
-  save: () => void;
-  create: (name: string) => 'success' | 'duplicated';
-  isNameDuplicate: (name: string) => boolean;
-  update: (tagId: string, name: string) => 'success' | 'duplicated' | 'not_found';
-  find: (id: string) => Tag | undefined;
-  remove: (id: string) => Tag | undefined;
-}
+import Vue from 'vue';
 
-interface Window {
-  tagList: Tag[];
+declare module 'vue/types/vue' {
+  interface Vue {
+    $storeIndex: any;
+  }
 }

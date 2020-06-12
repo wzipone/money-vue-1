@@ -1,7 +1,7 @@
 <template>
   <section class="tags">
     <ul class="current">
-      <li v-for="tag in dataSource" :key="tag.id"
+      <li v-for="tag in tags" :key="tag.id"
           :class="{selected:selectedTags.indexOf(tag.id) >= 0}"
           @click="toggle(tag.id)">
         {{tag.name}}
@@ -16,11 +16,11 @@
 <script lang="ts">
   import Vue from 'vue';
   import {Component, Prop} from 'vue-property-decorator';
-  import {tagListModel} from '@/models/tagListModel';
+  import store from '@/store/storeIndex';
 
   @Component
   export default class Tags extends Vue {
-    @Prop() readonly dataSource: Tag[] | undefined;
+    tags: Tag[] = store.fetchTags();
     selectedTags: string[] = [];
 
     toggle(tagId: string) {
@@ -37,15 +37,9 @@
       const tagName = prompt('请输入新标签名');
       if (tagName === null) return;
       if (tagName === '') {
-        alert('标签名不能为空');
-        return;
+        return alert('标签名不能为空');
       }
-      const message = tagListModel.create(tagName);
-      if (message === 'duplicated') {
-        alert('标签名重复');
-      } else if (message === 'success') {
-        alert('添加成功');
-      }
+      store.createTag(tagName);
     }
 
   }
