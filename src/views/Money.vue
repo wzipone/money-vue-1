@@ -48,8 +48,7 @@
     }
 
     saveRecord() {
-      const newRecord = recordListModel.clone(this.record);
-      this.recordList.push(newRecord);
+      recordListModel.create(this.record)
     }
 
     @Watch('recordList') //这里可以watch到
