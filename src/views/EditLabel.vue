@@ -20,7 +20,7 @@
   import {tagListModel} from '@/models/tagListModel';
   import InputItem from '@/components/InputItem.vue';
   import Button from '@/components/Button.vue';
-
+  tagListModel.fetch();
   @Component({
     components: {Button, InputItem}
   })

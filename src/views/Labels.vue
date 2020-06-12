@@ -38,8 +38,6 @@
       const message = tagListModel.create(tagName);
       if (message === 'duplicated') {
         alert('标签名重复');
-      } else if (message === 'success') {
-        alert('添加成功');
       }
     }
   }
