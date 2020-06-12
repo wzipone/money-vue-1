@@ -3,16 +3,6 @@ import createId from '@/lib/createId';
 const localItemName = 'tagList';
 
 
-type TagListModel = {
-  data: Tag[];
-  fetch: () => Tag[];
-  save: () => void;
-  create: (name: string) => 'success' | 'duplicated';
-  isNameDuplicate: (name: string) => boolean;
-  update: (tagId: string, name: string) => 'success' | 'duplicated' | 'not_found';
-  find: (id: string) => Tag | undefined;
-  remove: (id: string) => Tag | undefined;
-}
 const tagListModel: TagListModel = {
   data: [],
   fetch() {
@@ -23,8 +13,7 @@ const tagListModel: TagListModel = {
     window.localStorage.setItem(localItemName, JSON.stringify(this.data));
   },
   create(name) {
-    const names = this.data.map(tag => tag.name);
-    if (names.indexOf(name) >= 0) return 'duplicated';
+    if (this.isNameDuplicate(name)) return 'duplicated';
     const id = createId().toString();
     this.data.push({id, name: name});
     this.save();
