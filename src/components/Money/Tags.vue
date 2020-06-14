@@ -8,26 +8,30 @@
       </li>
     </ul>
     <div class="new">
-      <button @click="create">新增标签</button>
+      <button @click="onCreateTag">新增标签</button>
     </div>
   </section>
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
   import {mapMutations, mapState} from 'vuex';
+  import {mixins} from 'vue-class-component';
+  import {TagHelper} from '@/mixins/TagHelper';
 
   @Component({
-    computed: {...mapState({tagList: 'tagList'})},
-    methods: {...mapMutations({createTag: 'createTag', fetchTagList: 'fetchTags'})}
+    computed: mapState({tagList: 'tagList'}),
+    methods: mapMutations({createTag: 'createTag', fetchTagList: 'fetchTags'})
   })
-  export default class Tags extends Vue {
-    [x: string]: any;
+  export default class Tags extends mixins(TagHelper) {
+    createTag !: (name: string) => void;
+    fetchTagList !: () => void;
+    tagList !: Tag[];
+
     selectedTags: string[] = [];
 
-    created(){
-      this.fetchTagList()
+    created() {
+      this.fetchTagList();
     }
 
     toggle(tagId: string) {
@@ -38,15 +42,6 @@
         this.selectedTags.push(tagId);
       }
       this.$emit('update:selected', this.selectedTags);
-    }
-
-    create() {
-      const tagName = prompt('请输入新标签名');
-      if (tagName === null) return;
-      if (tagName === '') {
-        return alert('标签名不能为空');
-      }
-      this.createTag(tagName);
     }
 
   }

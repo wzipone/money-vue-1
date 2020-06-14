@@ -6,39 +6,32 @@
       </router-link>
     </div>
     <div class="createTag-wrapper">
-      <Button @click.native="create">新增标签</Button>
+      <Button @click.native="onCreateTag">新增标签</Button>
     </div>
 
   </Layout>
 </template>
 
 <script lang="ts">
-  import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
   import Button from '@/components/Button.vue';
   import {mapMutations, mapState} from 'vuex';
+  import {mixins} from 'vue-class-component';
+  import {TagHelper} from '@/mixins/TagHelper';
 
   @Component({
     components: {Button},
-    computed: {...mapState({tagList: 'tagList'})},
-    methods: {...mapMutations({createTag: 'createTag', fetchTags: 'fetchTags'})}
+    computed: mapState({tagList: 'tagList'}),
+    methods: mapMutations({fetchTags: 'fetchTags'})
   })
-  export default class Labels extends Vue {
-    [x: string]: any;
+  export default class Labels extends mixins(TagHelper) {
+    fetchTags!: () => void;
+    tagList!: Tag[];
 
     created() {
       this.fetchTags();
     }
 
-    create() {
-      const tagName = prompt('请输入新标签名');
-      if (tagName === null) return;
-      if (tagName === '') {
-        alert('标签名不能为空');
-        return;
-      }
-      this.createTag(tagName);
-    }
   }
 </script>
 
