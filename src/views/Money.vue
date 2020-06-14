@@ -18,32 +18,42 @@
   import Types from '@/components/Money/Types.vue';
   import NumberPad from '@/components/Money/NumberPad.vue';
   import InputItem from '@/components/InputItem.vue';
-  import store from '@/store/storeIndex';
+  import {mapMutations, mapState} from 'vuex';
 
   @Component({
-    components: {InputItem, NumberPad, Types, Tags}
+    components: {InputItem, NumberPad, Types, Tags},
+    computed: {
+      ...mapState(['recordList'])
+    },
+    methods: {
+      ...mapMutations(['fetchRecords', 'createRecord'])
+    }
   })
   export default class Money extends Vue {
+    [x: string]: any;
     record: RecordItem = {
       selectedTags: [],
       notes: '',
       type: '-',
       amount: 0
     };
-    recordList: RecordItem[] = store.recordList;
+
+    created() {
+      this.fetchRecords();
+    }
 
     onUpdateSelected(selectedTags: string[]) {
       this.record.selectedTags = selectedTags;
     }
 
     save() {
-      store.createRecord(this.record)
+      this.createRecord(this.record);
     }
 
-    @Watch('recordList') //这里可以watch到
-    onRecordListChange() {
-      store.saveRecords();
-    }
+    // @Watch('recordList') //这里可以watch到
+    // onRecordListChange() {
+    //   this.saveRecords();
+    // }
 
   }
 </script>
@@ -53,7 +63,8 @@
     display: flex;
     flex-direction: column;
   }
-  .notes{
+
+  .notes {
     padding: 10px 0;
   }
 </style>

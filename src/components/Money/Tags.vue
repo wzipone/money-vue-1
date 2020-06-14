@@ -1,7 +1,7 @@
 <template>
   <section class="tags">
     <ul class="current">
-      <li v-for="tag in tags" :key="tag.id"
+      <li v-for="tag in tagList" :key="tag.id"
           :class="{selected:selectedTags.indexOf(tag.id) >= 0}"
           @click="toggle(tag.id)">
         {{tag.name}}
@@ -15,13 +15,20 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component, Prop} from 'vue-property-decorator';
-  import store from '@/store/storeIndex';
+  import {Component} from 'vue-property-decorator';
+  import {mapMutations, mapState} from 'vuex';
 
-  @Component
+  @Component({
+    computed: {...mapState({tagList: 'tagList'})},
+    methods: {...mapMutations({createTag: 'createTag', fetchTagList: 'fetchTags'})}
+  })
   export default class Tags extends Vue {
-    tags: Tag[] = store.fetchTags();
+    [x: string]: any;
     selectedTags: string[] = [];
+
+    created(){
+      this.fetchTagList()
+    }
 
     toggle(tagId: string) {
       const index = this.selectedTags.indexOf(tagId);
@@ -39,7 +46,7 @@
       if (tagName === '') {
         return alert('标签名不能为空');
       }
-      store.createTag(tagName);
+      this.createTag(tagName);
     }
 
   }

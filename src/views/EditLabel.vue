@@ -19,16 +19,22 @@
   import {Component} from 'vue-property-decorator';
   import InputItem from '@/components/InputItem.vue';
   import Button from '@/components/Button.vue';
+  import {mapMutations, mapState} from 'vuex';
+  import storeHelper from '@/store/storeHelper';
 
   @Component({
-    components: {Button, InputItem}
+    components: {Button, InputItem},
+    computed: {...mapState({tagList: 'tagList'})},
+    methods: {...mapMutations({updateTag: 'updateTag', removeTag: 'removeTag', fetchTags: 'fetchTags'})}
   })
   export default class EditLabel extends Vue {
+    [x: string]: any;
     tag: Tag | undefined = undefined;
 
     created() {
+      this.fetchTags();
       const {id} = this.$route.params;
-      const tag = this.$storeIndex.findTag(id);
+      const tag = storeHelper.findTag(this.tagList, id);
       if (tag) {
         this.tag = tag;
       } else {
@@ -38,20 +44,23 @@
 
     onUpdateValue(name: string) {
       if (this.tag) {
-        this.$storeIndex.updateTag(this.tag.id, name);
+        this.updateTag({id: this.tag.id, name});
       }
     }
 
     remove() {
       if (this.tag) {
-        if (this.$storeIndex.removeTag(this.tag.id)) {
-          this.$router.replace('/labels');
-        }
+        this.removeTag({
+          id: this.tag.id,
+          callback: () => {
+            this.$router.replace('/labels');
+          }
+        });
       }
     }
 
     goBack() {
-      this.$router.push('/labels')
+      this.$router.push('/labels');
     }
 
   }

@@ -1,12 +1,12 @@
 <template>
   <Layout>
     <div class="tags">
-      <router-link :to="`/labels/edit/${tag.id}`" v-for="tag in tags" :key="tag.id"><span>{{tag.name}}</span>
+      <router-link :to="`/labels/edit/${tag.id}`" v-for="tag in tagList" :key="tag.id"><span>{{tag.name}}</span>
         <Icon name="right"/>
       </router-link>
     </div>
     <div class="createTag-wrapper">
-      <Button @click.native="createTag">新增标签</Button>
+      <Button @click.native="create">新增标签</Button>
     </div>
 
   </Layout>
@@ -16,25 +16,28 @@
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
   import Button from '@/components/Button.vue';
-  import store from '@/store/storeIndex';
-
+  import {mapMutations, mapState} from 'vuex';
 
   @Component({
-    components: {Button}
+    components: {Button},
+    computed: {...mapState({tagList: 'tagList'})},
+    methods: {...mapMutations({createTag: 'createTag', fetchTags: 'fetchTags'})}
   })
   export default class Labels extends Vue {
+    [x: string]: any;
 
-    tags = store.tagList;
+    created() {
+      this.fetchTags();
+    }
 
-    createTag() {
+    create() {
       const tagName = prompt('请输入新标签名');
       if (tagName === null) return;
       if (tagName === '') {
         alert('标签名不能为空');
         return;
       }
-
-      store.createTag(tagName)
+      this.createTag(tagName);
     }
   }
 </script>
