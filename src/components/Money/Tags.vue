@@ -20,18 +20,28 @@
   import {TagHelper} from '@/mixins/TagHelper';
 
   @Component({
-    computed: mapState({tagList: 'tagList'}),
+    // computed: mapState({tagList: 'tagList'}),
+    // computed:{
+    //   tagList(){
+    //     return this.$store.state.tagList
+    //   }
+    // },
     methods: mapMutations({createTag: 'createTag', fetchTagList: 'fetchTags'})
   })
   export default class Tags extends mixins(TagHelper) {
     createTag !: (name: string) => void;
     fetchTagList !: () => void;
-    tagList !: Tag[];
+    // tagList !: Tag[];
 
     selectedTags: string[] = [];
 
+    get tagList(){
+      return this.$store.state.tagList
+    }
+
     created() {
       this.fetchTagList();
+      console.log(this.tagList);
     }
 
     toggle(tagId: string) {
