@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import clone from '@/lib/clone';
 import createId from '@/lib/createId';
 import storeHelper from '@/store/storeHelper';
+import router from '@/router';
 
 Vue.use(Vuex);
 
@@ -47,15 +48,16 @@ const store = new Vuex.Store({
         store.commit('saveTags');
       }
     },
-    removeTag(state, obj: { id: string; callback: () => void }) {
-      const {id, callback} = obj;
+    removeTag(state, id: string) {
       const tag = storeHelper.findTag(state.tagList, id);
       if (tag) {
         const index = state.tagList.indexOf(tag);
         state.tagList.splice(index, 1);
         alert('删除成功');
-        callback();
         store.commit('saveTags');
+        router.replace('/labels');
+      }else{
+        alert('删除失败');
       }
     }
   },

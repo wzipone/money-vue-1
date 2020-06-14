@@ -41,7 +41,6 @@
 
     created() {
       this.fetchTagList();
-      console.log(this.tagList);
     }
 
     toggle(tagId: string) {

@@ -6,22 +6,23 @@
     <div class="notes">
       <InputItem :value.sync="record.notes" placeholder="请输入备注" label="备注"/>
     </div>
-    <Types :type="record.type" @update:type="record.type = $event"/>
+    <Tabs :value.sync="record.type" :data-source="recordTypeList" class-prefix="recordType"/>
     <NumberPad :value.sync="record.amount" @submit="save"/>
   </Layout>
 </template>
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component, Watch} from 'vue-property-decorator';
+  import {Component} from 'vue-property-decorator';
   import Tags from '@/components/Money/Tags.vue';
-  import Types from '@/components/Money/Types.vue';
   import NumberPad from '@/components/Money/NumberPad.vue';
   import InputItem from '@/components/InputItem.vue';
   import {mapMutations, mapState} from 'vuex';
+  import Tabs from '@/components/Tabs.vue';
+  import recordTypeList from '@/constants/recordTypeList';
 
   @Component({
-    components: {InputItem, NumberPad, Types, Tags},
+    components: {Tabs, InputItem, NumberPad, Tags},
     computed: {
       ...mapState(['recordList'])
     },
@@ -31,6 +32,8 @@
   })
   export default class Money extends Vue {
     [x: string]: any;
+
+    recordTypeList = recordTypeList;
     record: RecordItem = {
       selectedTags: [],
       notes: '',

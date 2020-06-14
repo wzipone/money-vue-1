@@ -50,12 +50,7 @@
 
     remove() {
       if (this.tag) {
-        this.removeTag({
-          id: this.tag.id,
-          callback: () => {
-            this.$router.replace('/labels');
-          }
-        });
+        this.removeTag(this.tag.id);
       }
     }
 
