@@ -2,6 +2,7 @@
   <ul :class="`${classPrefix}-tabs`" class="tabs">
     <li v-for="item in dataSource" :key="item.value"
         :class="{[`${classPrefix}-tabs-item`]: classPrefix, selected: item.value === value}"
+        :style="{lineHeight: height}"
         @click="select(item)">
       {{item.text}}
     </li>
@@ -24,6 +25,8 @@
     readonly dataSource !: TabItem[];
     @Prop({type: String})
     readonly classPrefix?: string;
+    @Prop({type: String, default: '64px'})
+    height?: string;
 
     select(item: TabItem) {
       this.$emit('update:value', item.value);
