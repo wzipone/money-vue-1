@@ -34,7 +34,7 @@
     [x: string]: any;
 
     recordTypeList = recordTypeList;
-    record: RecordItem = {
+    record: Omit<RecordItem, 'createAt'> = {
       selectedTags: [],
       notes: '',
       type: '-',
@@ -57,6 +57,7 @@
     // onRecordListChange() {
     //   this.saveRecords();
     // }
+
 
   }
 </script>

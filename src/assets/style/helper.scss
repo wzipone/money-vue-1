@@ -15,6 +15,12 @@ $color-highlight: #f00;
   }
 }
 
+%oneLine{
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 $color-shadow: rgba(0,0,0,.25);
 %outerShadow{
   box-shadow: inset 0 -4px 0 0 $color-shadow;
