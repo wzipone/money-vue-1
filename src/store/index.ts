@@ -13,23 +13,30 @@ const store = new Vuex.Store({
     tagList: [] as Tag[]
   } as RootState,
   mutations: {
-    createRecord(state, record) {
-      record.createAt = new Date().toISOString();
-      state.recordList.push(clone(record));
+    createRecord(state, obj) {
+      obj.record.createAt = new Date().toISOString();
+      state.recordList.push(clone(obj.record));
       store.commit('saveRecords');
+      obj.status = true;
     },
     fetchRecords(state) {
       state.recordList = JSON.parse(window.localStorage.getItem('recordList') || '[]') as RecordItem[];
     }
     ,
     saveRecords(state) {
-      console.log(1);
       window.localStorage.setItem('recordList', JSON.stringify(state.recordList));
     }
     ,
     //tagList
     fetchTags(state) {
       state.tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]');
+      if (!state.tagList || state.tagList.length === 0) {
+        ['衣', '食', '住', '行'].forEach(name => {
+          const id = createId().toString();
+          state.tagList.push({id, name});
+        });
+      }
+      store.commit('saveTags');
     }
     ,
     saveTags(state) {

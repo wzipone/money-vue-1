@@ -2,7 +2,7 @@
 
   <Layout class-prefix="layout">
     {{record}}
-    <Tags @update:selected="onUpdateSelected"/>
+    <Tags :selected-tags="record.selectedTags" @update:selected="onUpdateSelected"/>
     <div class="notes">
       <InputItem :value.sync="record.notes" placeholder="请输入备注" label="备注"/>
     </div>
@@ -21,6 +21,13 @@
   import Tabs from '@/components/Tabs.vue';
   import recordTypeList from '@/constants/recordTypeList';
 
+  const initialRecord = (): Omit<RecordItem, 'createAt'> => ({
+    selectedTags: [],
+    notes: '',
+    type: '-',
+    amount: 0
+  });
+
   @Component({
     components: {Tabs, InputItem, NumberPad, Tags},
     computed: {
@@ -34,23 +41,27 @@
     [x: string]: any;
 
     recordTypeList = recordTypeList;
-    record: Omit<RecordItem, 'createAt'> = {
-      selectedTags: [],
-      notes: '',
-      type: '-',
-      amount: 0
-    };
+    record: Omit<RecordItem, 'createAt'> = initialRecord();
 
     created() {
       this.fetchRecords();
     }
 
-    onUpdateSelected(selectedTags: string[]) {
-      this.record.selectedTags = selectedTags;
+    onUpdateSelected(tagId: string) {
+      const index = this.record.selectedTags.indexOf(tagId);
+      if (index >= 0) {
+        this.record.selectedTags.splice(index, 1);
+      } else {
+        this.record.selectedTags.push(tagId);
+      }
     }
 
     save() {
-      this.createRecord(this.record);
+      const obj = {record: this.record, status: false};
+      this.createRecord(obj);
+      if (obj.status) {
+        this.record = initialRecord();
+      }
     }
 
     // @Watch('recordList') //这里可以watch到

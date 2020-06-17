@@ -1,10 +1,10 @@
 <template>
   <Layout>
     <Tabs class-prefix="recordType" :data-source="recordTypeList" :value.sync="recordType"/>
-    <Tabs class-prefix="interval" :data-source="intervalList" :value.sync="interval" height="48px"/>
+<!--    <Tabs class-prefix="interval" :data-source="intervalList" :value.sync="interval" height="48px"/>-->
     <div>
-      <div class="message" v-if="recordList === []">当然没有任何记录，快来记一笔吧</div>
-      <ol class="records-wrapper">
+      <div v-if="result.length === 0" class="message" >当前没有任何记录，快来记一笔吧</div>
+      <ol v-else class="records-wrapper">
         <li v-for="([title,group],index) in result" :key="index">
           <div class="title">
             <h3>{{beautyDate(title)}}</h3>

@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-  import {Component} from 'vue-property-decorator';
+  import {Component, Prop} from 'vue-property-decorator';
   import {mapMutations, mapState} from 'vuex';
   import {mixins} from 'vue-class-component';
   import {TagHelper} from '@/mixins/TagHelper';
@@ -32,8 +32,7 @@
     createTag !: (name: string) => void;
     fetchTagList !: () => void;
     // tagList !: Tag[];
-
-    selectedTags: string[] = [];
+    @Prop(Array) selectedTags!: string[];
 
     get tagList(){
       return this.$store.state.tagList
@@ -44,13 +43,7 @@
     }
 
     toggle(tagId: string) {
-      const index = this.selectedTags.indexOf(tagId);
-      if (index >= 0) {
-        this.selectedTags.splice(index, 1);
-      } else {
-        this.selectedTags.push(tagId);
-      }
-      this.$emit('update:selected', this.selectedTags);
+      this.$emit('update:selected', tagId);
     }
 
   }
